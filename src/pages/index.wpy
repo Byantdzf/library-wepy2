@@ -1,0 +1,57 @@
+<style lang="less">
+</style>
+<wxs lang="babel" module="m1">
+const getTime = (time) => {
+let date = getDate(time);
+let hour = date.getHours();
+let mins = date.getMinutes();
+let sec = date.getSeconds();
+let milli = date.getMilliseconds();
+return `${hour}:${mins}:${sec}.${milli}`;
+}
+module.exports.getTime = getTime;
+</wxs>
+<template>
+  <div class="container">
+  </div>
+</template>
+
+<script>
+import wepy from '@wepy/core'
+
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: 'test'
+  },
+
+  hooks: {
+    // Page 级别 hook, 只对当前 Page 的 setData 生效。
+
+  },
+
+  mixins: [],
+
+  data: {
+
+  },
+
+  computed: {
+  },
+
+  methods: {
+
+  },
+
+  created() {
+
+  }
+})
+</script>
+<config>
+{
+navigationBarTitleText: 'WePY 2.0 测试 Demo',
+usingComponents: {
+}
+}
+</config>

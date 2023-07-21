@@ -1,0 +1,420 @@
+<style lang="less" scoped>
+page {
+  background: #ffffff;
+}
+.ui-sharePoster {
+  background: #ffffff;
+  .ui-top-poster-box{
+    position: relative;
+    .ui-top-poster-pic{
+      width: 100%;
+      height: 750rpx;
+      display: block;
+    }
+  }
+  .ui-content-box{
+    padding: 0 40rpx;
+    .ui-content-title{
+      padding: 42rpx 0 16rpx 0;
+    }
+    .ui-qrCode-area{
+      display: flex;
+      justify-content: space-between;
+      padding-left: 10rpx;
+      margin: 40rpx 0;
+      position: relative;
+      .ui-user-data{
+        margin-top: 46rpx;
+        .ui-user-name{
+          margin: 6rpx 0 22rpx 0;
+        }
+        .ui-line-icon{
+          width: 40rpx;
+          height: 2rpx;
+          display: block;
+        }
+      }
+      .ui-qrCode-icon{
+        width: 120rpx;
+        height: 120rpx;
+        display: block;
+        margin-bottom: 12rpx;
+      }
+    }
+    .ui-poster-warehouse{
+      display: flex;
+      justify-content: left;
+      flex-flow: wrap;
+      margin-top: 30rpx;
+      padding-bottom: 240rpx;
+      .ui-poster-warehouse-item{
+        width: 120rpx;
+        height: 120rpx;
+        display: block;
+        margin-right: 40rpx;
+        margin-bottom: 20rpx;
+      }
+      .ui-poster-warehouse-itemV2{
+        width: 116rpx;
+        height: 116rpx;
+        border: 2rpx solid #d8d8d8;
+        border-radius: 16rpx;
+        display: block;
+        margin-right: 40rpx;
+        margin-bottom: 20rpx;
+        position: relative;
+        image{
+          width: 100rpx;
+          height: 100rpx;
+          display: block;
+          border-radius: 16rpx;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      .ui-active-poster{
+        border: 2rpx solid #8194FF;
+      }
+    }
+  }
+}
+.ui-bottom-operation{
+  width: 100%;
+  background: #ffffff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  border-top: 2rpx solid #f5f5f5;
+  .ui-operation-icon{
+    width: 40rpx;
+    height: 40rpx;
+    display: block;
+    margin-bottom: 2rpx;
+  }
+  .ui-operation-btn{
+    width: 500rpx;
+    height: 72rpx;
+    background: linear-gradient(90deg, #9DC0F8 0%, #508AFC 100%);
+    border-radius: 36rpx;
+  }
+}
+
+._pic{
+  width: 95%;
+  border-radius: 12rpx;
+}
+._icon_close{
+  top: 20rpx!important;
+  right: 36rpx!important;
+  z-index: 99999;
+}
+._save_btn{
+  width: 600rpx;
+  height: 80rpx;
+  background: linear-gradient(90deg, #9DC0F8 0%, #508AFC 100%);
+  border-radius: 40rpx;
+}
+</style>
+<template>
+  <view class="ui-sharePoster">
+    <view class="ui-top-poster-box">
+      <image class="ui-top-poster-pic" :src="pics[selectIndex]" mode="aspectFill"></image>
+    </view>
+    <view class="ui-content-box">
+      <view class="font_36 color333 bold ui-content-title">{{detail.name}}</view>
+      <view class="font_28 color666">发现一批好书可以借阅</view>
+      <view class="ui-qrCode-area">
+        <view class="ui-user-data">
+          <view class="font_30 color666 bold">了解更多详情识别二维码</view>
+          <view class="ui-user-name font_26 color999">@{{detail.link_name}}</view>
+          <image class="ui-line-icon" src="https://image.fulllinkai.com/202302/28/dd344c69484dfa46820998dde150556f.png" mode="widthFix"></image>
+        </view>
+        <view>
+          <image class="ui-qrCode-icon" :src="detail.qrcode" mode="widthFix"></image>
+          <view class="font_24 color999">长按二维码</view>
+        </view>
+      </view>
+      <view class="font_26 color666">*保存至相册，分享给好友或朋友圈</view>
+      <view class="ui-poster-warehouse">
+<!--        <image class="ui-poster-warehouse-item" src="https://image.fulllinkai.com/202302/28/f837db912e3800f1f7cddef8c0f73304.png" mode="widthFix" @tap="modalName = 'fileModal'"></image>-->
+        <view class="ui-poster-warehouse-itemV2 {{selectIndex == index ? 'ui-active-poster' : ''}}" v-for="(item,index) in thumbnail" :key="index" @tap="selectPoster(index)">
+          <image :src="item" mode="aspectFill"></image>
+        </view>
+      </view>
+    </view>
+    <view class="ui-bottom-operation f-fbc" style="padding: {{bottomLine ? '18rpx 30rpx 42rpx 40rpx' : '18rpx 30rpx 18rpx 40rpx'}}">
+      <view @tap="jumpHome('/pages/tabBar/home')">
+        <image class="ui-operation-icon" src="https://image.fulllinkai.com/202307/18/570c53f6db83821656e24705ecd8525c.png" mode="widthFix"></image>
+        <view class="font_20 color666">主页</view>
+      </view>
+      <view @tap="jumpPath('/pages/user_page/myPicWarehouse')">
+        <image class="ui-operation-icon" src="https://image.fulllinkai.com/202302/28/a28e1fe4bb511548ce9a56693d0c1461.png" mode="widthFix"></image>
+        <view class="font_20 color666">图库</view>
+      </view>
+      <view class="ui-operation-btn f-fcc font_30 white" @tap="savePoster">分享海报</view>
+    </view>
+    <block v-if="posterConfig">
+      <poster type="2d" id="poster" hide-loading="{{false}}" preload="{{false}}" config="{{posterConfig}}" bind:success="onPosterSuccess" bind:fail="onPosterFail">
+      </poster>
+    </block>
+    <uploadPics :modalName="modalName" @changeVal="changeVal"></uploadPics>
+    <view class="~cu-modal {{modalName=='showPic'?'~show':''}}">
+      <view class="~cu-dialog" style="padding: 0; background: none;border-radius: 0;">
+        <image class="~_icon_close_pic _icon_close" src="~@/images/icon/close_icon_v3.png" mode="aspectFit" @tap="cancelFn"></image>
+        <image class="_pic" src="{{posterIMG}}" mode="widthFix" @tap="cancelFn"></image>
+        <view class="_save_btn ~spacing2 ~font_30 ~f-fcc ~marginT24 ~colorfff" @tap="authorizationAlbum">保存至相册，分享给好友或朋友圈</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from '@wepy/core'
+import https from '../../mixins/https'
+import base from '../../mixins/base'
+import {service} from '../../config'
+
+wepy.page({
+  config: {},
+  mixins: [https, base],
+
+  data: {
+    id: '',
+    detail: {},
+    posterConfig: {},
+    posterIMG: '',
+    modalName: '',
+    selectIndex: 0,
+    loading: false,
+    bottomLine: false,
+    thumbnail: [
+      'https://image.fulllinkai.com/202307/20/f051744115f6a43c1edbdecbce97c866.png',
+      'https://image.fulllinkai.com/202307/20/c21b18359def0f4b0fdf77c3fb58fec3.png',
+      'https://image.fulllinkai.com/202307/20/ce498f48cf8cc3e13f462ad04ed95bf6.png',
+      'https://image.fulllinkai.com/202307/20/3b10e49dcf39e70aeee9ed31ff6ea778.png',
+      'https://image.fulllinkai.com/202307/20/723e42b98621b7a1eb693da74f62cbc7.png'
+    ],
+    pics: [
+      'https://image.fulllinkai.com/202307/20/1b83e7536291530b69e41beeaf491c6b.jpeg',
+      'https://image.fulllinkai.com/202307/20/58af94535775dfd18e0fda6a6cd3dd8b.jpeg',
+      'https://image.fulllinkai.com/202307/20/8d6c440b77b063db61c6ef8270025c3c.jpeg',
+      'https://image.fulllinkai.com/202307/20/16970bbb3618098c51e1e7e583ead380.jpeg',
+      'https://image.fulllinkai.com/202307/20/0813ef3e9e950e3f35fd867c49764c3a.jpeg'
+    ]
+  },
+
+  methods: {
+    initPageData() {
+      let vm = this
+      vm.$get({url: `${service.host}/libraries/${vm.id}/v3?page=${vm.page}`}).then(({code, data}) => {
+        if (code === 0) {
+          vm.detail = data
+          vm.loading = true
+          console.log(data)
+        }
+      })
+    },
+    getList() { // 获取图库数据
+      let vm = this
+      vm.$get({url: `${service.host}/libraries/get/background/images`}).then(({code, data}) => {
+        if (code === 0) {
+          vm.pics = data
+          console.log(data, '11')
+        }
+      })
+    },
+    onPosterSuccess(e) {
+      this.posterIMG = e.$wx.detail
+      this.modalName = 'showPic'
+      wx.hideLoading()
+      console.log(`海报: ${this.posterIMG}`)
+    },
+    savePoster() {
+      let vm = this
+      if (!vm.loading) {
+        return
+      }
+      let textHeight = 0
+      vm.$showLoading('海报生成中')
+      const query = wx.createSelectorQuery()
+      query.select('.ui-content-title').boundingClientRect()
+      query.exec((data) => {
+        textHeight = data[0].height
+        let shareConfig = {
+          width: 750,
+          height: 1334,
+          backgroundColor: '#fff',
+          borderRadius: 50,
+          debug: false,
+          texts: [
+            {
+              x: 30,
+              y: 834,
+              width: 660,
+              text: vm.detail.name,
+              fontWeight: 'bold',
+              lineNum: 2,
+              lineHeight: 54,
+              fontSize: 36,
+              color: '#333333'
+            },
+            {
+              x: 30,
+              y: textHeight > 65 ? 944 : 884,
+              width: 660,
+              text: '发现一批好书可以借阅',
+              lineNum: 3,
+              lineHeight: 40,
+              fontSize: 28,
+              color: '#666666'
+            },
+            {
+              x: 584,
+              y: 1226,
+              text: '长按二维码',
+              fontSize: 24,
+              color: '#999999'
+            },
+            {
+              x: 30,
+              y: 1134,
+              text: '了解更多详情识别二维码',
+              fontWeight: 'bold',
+              fontSize: 30,
+              color: '#666666'
+            },
+            {
+              x: 30,
+              y: 1184,
+              text: `@${vm.detail.link_name}`,
+              fontSize: 26,
+              color: '#999999'
+            }
+          ],
+          images: [
+            {
+              url: vm.pics[vm.selectIndex],
+              width: 750,
+              height: 750,
+              y: 0,
+              x: 0
+            },
+            {
+              url: vm.detail.qrcode,
+              width: 140,
+              height: 140,
+              y: 1050,
+              x: 572
+            },
+            {
+              url: 'https://image.fulllinkai.com/202302/28/dd344c69484dfa46820998dde150556f.png',
+              width: 40,
+              height: 2,
+              y: 1214,
+              x: 32
+            }
+          ]
+        }
+        vm.posterConfig = shareConfig
+        vm.$nextTick(() => {
+          setTimeout(() => {
+            vm.$wx.selectComponent('#poster').onCreate(true, vm)
+          }, 100)
+        })
+      })
+    },
+    authorizationAlbum() {
+      let vm = this
+      wx.saveImageToPhotosAlbum({
+        filePath: vm.posterIMG,
+        success: function () {
+          vm.modalName = ''
+          wx.showToast({
+            title: '已保存相册',
+            icon: 'success',
+            duration: 2000
+          })
+        },
+        fail(err) {
+          if (err.errMsg === 'saveImageToPhotosAlbum:fail:auth denied' || err.errMsg === 'saveImageToPhotosAlbum:fail auth deny' || err.errMsg === 'saveImageToPhotosAlbum:fail authorize no response') {
+            wx.showModal({
+              title: '提示',
+              content: '需要您授权保存相册',
+              showCancel: false,
+              success: modalSuccess => {
+                wx.openSetting({
+                  success(settingdata) {
+                    if (settingdata.authSetting['scope.writePhotosAlbum']) {
+                      wx.saveImageToPhotosAlbum({
+                        filePath: vm.posterIMG,
+                        success: function () {
+                          vm.modalName = ''
+                          wx.showToast({
+                            title: '已保存相册',
+                            icon: 'success',
+                            duration: 2000
+                          })
+                        }
+                      })
+                    } else {
+                      wx.showToast({
+                        title: '授权失败，请稍后重新获取',
+                        icon: 'none',
+                        duration: 1500
+                      })
+                    }
+                  }
+                })
+              }
+            })
+          }
+        }
+      })
+    },
+    cancelFn() {
+      this.modalName = ''
+    },
+    // 获取上传的图片
+    changeVal(val) {
+      this.pics.unshift(val)
+      this.modalName = ''
+    },
+    selectPoster(index) {
+      this.selectIndex = index
+    },
+    jumpPath(url) {
+      this.$goto(url)
+    },
+    jumpHome(url) {
+      this.$gotoTab(url)
+    }
+  },
+  onLoad(e) {
+    this.id = e.id
+    this.initPageData()
+    // this.getList()
+  },
+  onShow() {
+    let res = wx.getSystemInfoSync()
+    if (res.model.indexOf('iPhone X') > -1 || res.safeArea.top > 20) {
+      this.bottomLine = true
+    }
+  },
+  created() {
+  }
+})
+</script>
+<config>
+{
+navigationBarTitleText: '分享海报',
+enablePullDownRefresh: false,
+backgroundColorTop: '#F4F7FC',
+backgroundColorBottom: '#F4F7FC',
+usingComponents: {
+uploadPics: '~@/components/uploadPics',
+'poster': 'plugin://FL-plugin/poster'
+}
+}
+</config>

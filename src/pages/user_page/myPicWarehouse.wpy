@@ -1,0 +1,172 @@
+<style lang="less" scoped>
+page {
+  background-color: #ffffff;
+}
+.ui-myPicWarehouse{
+  width: 100vw;
+  min-height: 100vh;
+  background: #ffffff;
+}
+.ui-warehouse-box{
+  padding: 40rpx 30rpx 0 30rpx;
+  .ui-warehouse-title{
+    padding-bottom: 24rpx;
+  }
+  .ui-delete-icon{
+    width: 28rpx;
+    height: 28rpx;
+    display: block;
+    margin-right: 4rpx;
+  }
+  .ui-delete-text{
+    color: #5c9dff;
+  }
+  .ui-clear-btn{
+    width: 88rpx;
+    height: 44rpx;
+    border-radius: 22rpx;
+    border: 2rpx solid #D8D8D8;
+  }
+  .ui-upload-box{
+    flex-flow: wrap;
+    .ui-upload-icon-box{
+      position: relative;
+      .ui-upload-clear-icon{
+        position: absolute;
+        right: 16rpx;
+        top: 16rpx;
+        z-index: 9;
+        width: 24rpx;
+        height: 24rpx;
+      }
+      .ui-delete-mask{
+        position: absolute;
+        z-index: 8;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 16rpx);
+        border-radius: 16rpx;
+        background: rgba(0,0,0,0.4);
+        overflow: hidden;
+      }
+    }
+    .ui-upload-icon{
+      width: 220rpx;
+      height: 220rpx;
+      display: block;
+      border-radius: 16rpx;
+      margin-bottom: 16rpx;
+    }
+  }
+  .ui-upload-box:after{
+    width: 220rpx;
+    content: '';
+  }
+}
+</style>
+
+<template>
+  <view class="ui-myPicWarehouse">
+    <view class="ui-warehouse-box">
+      <view class="f-fbc ui-warehouse-title">
+        <view class="font_32 color333">我的图库</view>
+<!--        <block v-if="!showDelete">-->
+<!--          <view class="f-fcl" @tap="showDelete = true">-->
+<!--            <image class="ui-delete-icon" src="https://image.fulllinkai.com/202307/18/a0f685102537faf992ab6ebcae2fe75b.png" mode="widthFix"></image>-->
+<!--            <view class="ui-delete-text font_24">删除</view>-->
+<!--          </view>-->
+<!--        </block>-->
+<!--        <block v-else>-->
+<!--          <view class="ui-clear-btn font_24 color666 f-fcc" @tap="showDelete = false">取消</view>-->
+<!--        </block>-->
+      </view>
+      <view class="ui-upload-box f-fbc">
+<!--        <image class="ui-upload-icon" v-if="pics.length < 9" src="https://image.fulllinkai.com/202301/07/6c9bc853bed42c9871f56156d1b8f31c.png" mode="widthFix" @tap="modalName = 'fileModal'"></image>-->
+        <view class="ui-upload-icon-box" v-for="(item,index) in pics" :key="index">
+          <image class="ui-upload-icon" :src="item" mode="aspectFill" @tap="$previewImages(item,pics)"></image>
+          <block v-if="showDelete">
+            <image class="ui-upload-clear-icon" src="https://image.fulllinkai.com/202307/18/7c61d66844f7c3d761a1afbe9daad216.png" mode="widthFix" @tap="clearPic(item,index)"></image>
+            <view class="ui-delete-mask"></view>
+          </block>
+        </view>
+      </view>
+    </view>
+    <uploadPics :modalName="modalName" @changeVal="changeVal"></uploadPics>
+  </view>
+</template>
+
+<script>
+import wepy from '@wepy/core'
+import https from '../../mixins/https'
+import base from '../../mixins/base'
+import {getElement_WH} from '../../utils/util'
+import {service} from '../../config'
+
+wepy.page({
+  config: {},
+  mixins: [https, base],
+
+  data: {
+    showDelete: false,
+    pics: [],
+    modalName: ''
+  },
+  methods: {
+    getList() { // 获取数据
+      let vm = this
+      vm.$get({url: `${service.host}/libraries/get/background/images`}).then(({code, data}) => {
+        if (code === 0) {
+          vm.pics = data
+          console.log(data, '11')
+        }
+      })
+    },
+    // 获取上传的图片
+    changeVal(val) {
+      this.pics.push(val)
+      this.modalName = ''
+    },
+    // 删除某个已上传的图片
+    clearPic(e, index) {
+      let vm = this
+      wx.showModal({
+        title: '',
+        content: `是否确认删除第${index + 1}张图片？`,
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+            vm.$delete({url: `${service.host}/user/health/report/${e.id}`}).then(({code, data}) => {
+              if (code === 0) {
+                vm.$Toast_success('删除成功')
+                vm.pics.splice(index, 1)
+              }
+            }).catch(err => {
+              console.log(err)
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+    }
+  },
+  onLoad() {
+    this.getList()
+  },
+  onShow() {
+  },
+  created() {
+  }
+})
+</script>
+<config>
+{
+navigationBarTitleText: '管理图库',
+backgroundColorTop: '#ffffff',
+backgroundColorBottom: '#ffffff',
+"usingComponents": {
+uploadPics: '~@/components/uploadPics'
+}
+}
+</config>

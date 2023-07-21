@@ -1,0 +1,173 @@
+<style lang="less">
+@import './styles/index.less';
+
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  background: red;
+}
+</style>
+<script>
+import wepy from '@wepy/core'
+import vuex from '@wepy/x'
+import promisify from '@wepy/use-promisify'
+import utils from './utils/util'
+
+wepy.use(promisify)
+
+wepy.use(vuex)
+
+wepy.app({
+  hooks: {
+    // App 级别 hook，对整个 App 生效
+    // 同时存在 Page hook 和 App hook 时，优先执行 Page hook，返回值再交由 App hook 处
+    'before-setData': function (dirty) {
+      // console.log('setData dirty: ', dirty)
+      return dirty
+    }
+  },
+  globalData: {
+    userInfo: null,
+    statusBarHeight: 0,
+    titleBarHeight: 0,
+    StatusBar: 0, // 顶部状态栏
+    bottomLift: 0 // 小黑条
+  },
+  onLoad() {
+
+  },
+  onLaunch(options) {
+    utils.getUpdateManager() // 版本自动更新
+    if (options.query && options.query.from_openid) {
+      wx.setStorageSync('from_openid', options.query.from_openid)
+    }
+    console.log(this.$options)
+    let app = this.$options
+    wx.getSystemInfo({
+      success: e => {
+        app.globalData.bottomLift = e.screenHeight - e.safeArea.bottom
+        app.globalData.StatusBar = e.statusBarHeight
+        let capsule = wx.getMenuButtonBoundingClientRect()
+        if (capsule) {
+          app.globalData.Custom = capsule
+          app.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight
+        } else {
+          app.globalData.CustomBar = e.statusBarHeight + 50
+        }
+      }
+    })
+    // this.testAsync()
+    this.appLogin()
+    // eventHub.$on('app-launch', (...args) => {
+    //   console.log('app-launch event emitted, the params are:')
+    //   console.log(args)
+    // })
+  },
+
+  methods: {
+    appLogin() {
+      utils.wx_login().then((data) => {
+        console.log(data)
+        // resolve(data)
+        // let {accid, token} = data.user.wyy_user
+        // // let accid = '1304'
+        // // let token = 'fee12f11f791a4a615cd3aeef6451780'
+        // wx.setStorageSync('accid', accid)
+        // wx.setStorageSync('wytoken', token)
+        // vm.globalData.nim = utils.IM(accid, token) // 建立聊天
+        // if (vm.userInfoReadyCallback) {
+        //   vm.userInfoReadyCallback(data)
+        // }
+        wx.hideLoading()
+      })
+    },
+    sleep(s) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('promise resolved')
+        }, s * 1000)
+      })
+    },
+
+    async testAsync() {
+      let d = await this.sleep(3)
+      console.log(d)
+    }
+  }
+})
+</script>
+<config>
+{
+pages: [
+'pages/tabBar/home',
+'pages/register',
+'pages/tabBar/welcome',
+'pages/tabBar/user',
+'pages/tabBar/library'
+],
+subPackages: [
+{
+'root': 'pages/sub_page',
+'pages': ['searchLibrary','searchBooks','createLibrary','libraryDetail','bookDetail','createBookComment',
+'editBook','BookComment','enteringBooks','classBooks','Management','BorrowManage','BorrowBook','bookClassList','bookLibrary']
+},
+{
+'root': 'pages/user_page',
+'pages': ['myDeposit','myWallet','myBorrow','myPicWarehouse','myLibrary','sharePoster','userInfor']
+},
+],
+window: {
+backgroundTextStyle: 'light',
+navigationBarBackgroundColor: '#fff',
+navigationBarTitleText: 'WeChat',
+navigationBarTextStyle: 'black'
+},
+tabBar: {
+color: '#999999',
+selectedColor: '#5C9DFF',
+backgroundColor: '#ffffff',
+borderStyle: 'black',
+list: [
+{
+pagePath: 'pages/tabBar/home',
+iconPath: './images/tabbar/home.png',
+selectedIconPath: './images/tabbar/home_a.png',
+text: '首页'
+}
+, {
+pagePath: 'pages/tabBar/library',
+iconPath: './images/tabbar/library.png',
+selectedIconPath: './images/tabbar/library_a.png',
+text: '图书馆'
+}, {
+pagePath: 'pages/tabBar/user',
+iconPath: './images/tabbar/user.png',
+selectedIconPath: './images/tabbar/user_a.png',
+text: '我的'
+}]
+},
+useExtendedLib: {
+},
+plugins: {
+'FL-plugin': {
+'version': '0.0.3',
+'provider': 'wxc41491431733671e'
+}
+},
+'permission': { // 地理位置获取
+'scope.userFuzzyLocation': {
+'desc': '你的位置信息将用于小程序位置接口的效果展示'
+}
+},
+"lazyCodeLoading": "requiredComponents",
+'requiredPrivateInfos': [
+'getFuzzyLocation',
+'chooseLocation'
+],
+}
+</config>
