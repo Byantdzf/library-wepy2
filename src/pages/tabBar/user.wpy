@@ -174,7 +174,7 @@ wepy.page({
       {
         icon: 'https://image.fulllinkai.com/202307/18/2fa838d8752e3672f1917dca316a56d2.png',
         title: '我的图库',
-        path: '/pages/user_page/myWallet'
+        path: '/pages/user_page/myPicWarehouse'
       },
       {
         icon: 'https://image.fulllinkai.com/202305/09/15d1372edef73da4bee232ff73be2ed1.png',
