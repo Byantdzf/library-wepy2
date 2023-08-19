@@ -179,9 +179,6 @@ const uploadImg = (filePaths) => {
       },
       success: (resp) => {
         resolve(JSON.parse(resp.data).data)
-        // vm.EditImage = JSON.parse(resp.data).data
-        // console.log(that.EditImage)
-        // that.$apply()
       },
       fail: (res) => {
       },

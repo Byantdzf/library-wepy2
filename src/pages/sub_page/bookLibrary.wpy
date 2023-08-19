@@ -65,7 +65,7 @@ page {
         ._intro{
           margin-top: 12rpx;
           width: 488rpx;
-          min-height: 72rpx;
+          height: 68rpx;
         }
       }
     }
@@ -174,7 +174,6 @@ initPageData() {
             if (vm.list < 1) {
               return vm.no_more = true
             }
-            return
           }
           if (vm.page == 1) {
             vm.page++

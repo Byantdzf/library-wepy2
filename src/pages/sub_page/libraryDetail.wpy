@@ -14,7 +14,7 @@ page {
   ._container {
     ._library_info {
       padding: 36rpx 30rpx 30rpx;
-      border-bottom: 16rpx solid #f8f8f8;
+      //border-bottom: 16rpx solid #f8f8f8;
 
       ._pic {
         width: 180rpx;
@@ -59,9 +59,12 @@ page {
       }
 
       ._tabs {
-        margin-top: 40rpx;
+        margin-top: 20rpx;
         padding: 0 4rpx;
-
+        padding: 30rpx;
+        background: #FFFFFF;
+        box-shadow: 0rpx 4rpx 20rpx 0rpx rgba(0,0,0,0.08);
+        border-radius: 16rpx;
         ._dot {
           width: 2rpx;
           height: 52rpx;
@@ -71,8 +74,11 @@ page {
     }
 
     ._library_container {
-      padding: 30rpx;
-
+      margin: 0 30rpx;
+      padding: 30rpx 24rpx;
+      box-shadow: 0rpx 4rpx 20rpx 0rpx rgba(0,0,0,0.08);
+      border-radius: 16rpx;
+      background: #FFFFFF;
       ._icon {
         width: 24rpx;
         height: 28rpx;
@@ -88,6 +94,13 @@ page {
         width: 12rpx;
         height: 20rpx;
         margin-left: 12rpx;
+      }
+      ._icon_c {
+        width: 24rpx;
+        height: 24rpx;
+        margin-right: 12rpx;
+        vertical-align: middle;
+        margin-bottom: -1rpx;
       }
     }
 
@@ -105,9 +118,9 @@ page {
         width: 100%;
         justify-content: center;
         display: grid;
-        gap: 68rpx;
+        gap: 60rpx;
         grid-template-columns: repeat(auto-fill, 172rpx);
-
+        margin-bottom: 14px;
       }
       ._borrow_out{
         width: 172rpx;
@@ -132,6 +145,7 @@ page {
 
         ._text {
           padding: 4rpx;
+          padding-top: 10rpx;
         }
       }
     }
@@ -189,12 +203,68 @@ page {
   }
 }
 
+._class {
+  width: 100%;
+  position: relative;
+  ._moreBox{
+    width: 70rpx;
+    height: 60rpx;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #FFFFFF 31%, #FFFFFF 100%);
+    position: absolute;
+    right: 0;
+    top:0rpx;
+    padding-top: 10rpx;
+    ._icon_m{
+      width: 32rpx;
+      height: 32rpx;
+    }
+  }
+  ._class_item{
+    min-width: 200rpx;
+    height: 52rpx;
+    line-height: 52rpx;
+    padding: 0 16rpx;
+    margin-bottom: 16rpx;
+    border-radius: 26rpx;
+    border: 2rpx solid #E0E0E0;
+  }
+  ._icon_sq{
+    width: 24rpx;
+    height: 12rpx;
+    margin-right: 8rpx;
+  }
+}
+
+.page-section-spacing{
+  //margin-top: 60rpx;
+  width: 620rpx;
+}
+.scroll-view_H{
+  white-space: nowrap;
+}
+.scroll-view-item{
+  //height: 30rpx;
+}
+.scroll-view-item_H{
+  display: inline-block;
+  //background: red;
+  margin-right: 32rpx;
+}
+._active{
+  height: 52rpx;
+  background: linear-gradient(90deg, #9DC0F8 0%, #508AFC 100%);
+  border-radius: 26rpx;
+  color: white;
+  line-height: 52rpx;
+  padding: 0 16rpx;
+}
+
+
 ._icon_type {
   width: 64rpx;
   height: 32rpx;
   margin-left: 12rpx;
 }
-
 
 </style>
 
@@ -271,8 +341,8 @@ module.exports.getBadgeR = getBadgeR;
       </view>
       <view class="_tabs f-fbc">
         <view class="text-c" @tap="$goto(`/pages/sub_page/classBooks?id=${id}&is_admin=${librarieData.is_admin}`)">
-          <view class="color-theme font_32 bold lineH44">{{librarieData.library_books_count}}册</view>
-          <view class="_name color666 font_26 marginT10">馆藏册数</view>
+          <view class="color-theme font_32 bold lineH44">{{librarieData.library_books_count}}本</view>
+          <view class="_name color666 font_26 marginT10">全部图书</view>
         </view>
         <view class="_dot"></view>
         <view class="text-c">
@@ -287,7 +357,7 @@ module.exports.getBadgeR = getBadgeR;
               {{librarieData.join_member_num>99?"99+":librarieData.join_member_num}}
           </view>
         </view>
-        <view class="_dot"></view>
+<!--        <view class="_dot"></view>-->
         <view class="text-c relative" @tap="$goto(`/pages/sub_page/BorrowManage?id=${id}&is_admin=${librarieData.is_admin}`)">
           <view class="color-theme font_32 bold lineH44">{{librarieData.borrows_count}}册</view>
           <view class="_name color666 font_26 marginT10">借阅册数</view>
@@ -297,7 +367,7 @@ module.exports.getBadgeR = getBadgeR;
         </view>
       </view>
     </view>
-    <view class="_library_container">
+    <view class="_library_container ff">
       <view class="_title bold color333 font_30 lineH42">简介内容</view>
       <view class="font_26 color666 lineH36">{{librarieData.intro?librarieData.intro:'...'}}
       </view>
@@ -307,32 +377,40 @@ module.exports.getBadgeR = getBadgeR;
         <image class="_icon" src="~@/images/icon/nav_icon.png" mode="aspectFit"></image>
       </view>
       <view class="font_26 color666 lineH36" v-if="!librarieData&&!librarieData.address">暂无联系地址</view>
-      <view class="f-fbc" v-if="librarieData.recommend_library_books.length>0">
-        <view class="_title bold color333 font_30 lineH42 marginT40">馆长推荐</view>
-<!--        <view class="font_26 color666 lineH36 f-fc">-->
-<!--          <text class="color-theme">更多图书</text>-->
-<!--          <image class="_icon_r" src="~@/images/icon/right_icon.png" mode="aspectFit"></image>-->
-<!--        </view>-->
+    </view>
+    <view class="_library_container marginT30">
+      <view class="f-fbc marginB20">
+        <view class="_title bold color333 font_30 lineH42 margin0">馆藏书籍</view>
+        <view class="font_26 color666 lineH36 f-fc" @tap="$goto(`/pages/sub_page/bookLibrary?id=${id}`)">
+          <image class="_icon_c" src="~@/images/icon/sousuo_icon.png" mode="aspectFit"></image>
+          <text class="color-theme">搜索图书</text>
+        </view>
       </view>
-      <view class="_list marginT20">
-        <view class="_item_box">
-          <view v-for="(item, index) in librarieData.recommend_library_books" :key="index" class="_item"
-                @click="goto(`/pages/sub_page/bookDetail?id=${item.book_id}&library_id=${item.library_id}&user_id=${item.user_id}`,item)">
-            <image src="{{item.image?item.image:'https://image.fulllinkai.com/202305/17/e072b39804d657bbe98ff99809e1948f.png'}}" mode="aspectFill"
-                   class="_img"></image>
-            <view v-if="item.borrow_out == 1" class="_borrow_out"></view>
-            <view class="color333 font_20 _text ellipsis_1"> {{item.title?item.title:'图书信息缺失'}}</view>
+
+<!--      <view class="_class">-->
+<!--        <view class="page-section-spacing">-->
+<!--          <scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%">-->
+<!--            <block v-for="(item, index) in sorts">-->
+<!--              <view  class="scroll-view-item_H {{item.active?'_active':''}}" @tap="searchSort(index)">{{item.name}}</view>-->
+<!--            </block>-->
+<!--          </scroll-view>-->
+<!--        </view>-->
+<!--        <view class="_moreBox text-r">-->
+<!--          <image class="_icon_m" src="~@/images/icon/sq.png.png" mode="aspectFit"></image>-->
+<!--        </view>-->
+<!--      </view>-->
+       <view class="_class">
+        <view class="page-section-spacing" style="width: 100%;">
+            <block v-for="(item, index) in sorts">
+              <view  class="scroll-view-item_H {{item.active?'_active':''}} _class_item text-c marginR16"  @tap="searchSort(index)">{{item.name}}</view>
+            </block>
+          <view class="f-fcc marginT8">
+            <image class="_icon_sq" src="~@/images/icon/sq.png" mode="aspectFit"></image><view class="font_24 color333">收起</view>
           </view>
         </view>
       </view>
-      <view class="f-fbc marginT68">
-        <view class="_title bold color333 font_30 lineH42 margin0">全部图书</view>
-        <view class="font_26 color666 lineH36 f-fc" @tap="$goto(`/pages/sub_page/bookLibrary?id=${id}`)">
-          <text class="color-theme">更多图书</text>
-          <image class="_icon_r" src="~@/images/icon/right_icon.png" mode="aspectFit"></image>
-        </view>
-      </view>
-      <view class="_list marginT40">
+
+      <view class="_list marginT30">
         <view v-if="no_more" class="_no_more text-c" style="height: 42vh;margin-top: 12vh;">
           <image src="https://image.fulllinkai.com/202305/20/126800766170e753faeb31a74b370152.png" mode="widthFix"
                  class="_no_more_img"></image>
@@ -406,6 +484,8 @@ wepy.page({
     showCustom: false,
     no_more: false,
     librarieData: null,
+    sorts: null,
+    sorts_id: 0,
     page: 1,
     id: 0,
     bottomLift: 0,
@@ -421,16 +501,16 @@ wepy.page({
   },
 // 上拉获取更多数据
   onReachBottom() {
-    // if (!this.no_more) {
-      this.initPageData()
-    // }
+    if (!this.no_more) {
+      this.getBookData()
+    }
   },
   // 下拉刷新
   onPullDownRefresh() {
     this.page = 1
     this.library_books = []
     // this.no_more = false
-    this.initPageData()
+    this.getBookData()
   },
   onShareAppMessage(e) {
     this.modalName = ''
@@ -439,6 +519,20 @@ wepy.page({
     return onShareAppMessage(title, path)
   },
   methods: {
+    searchSort(index) {
+      console.log(index)
+      for (let index in this.sorts) {
+        this.sorts[index].active = false
+      }
+      this.sorts[index].active = true
+      let sorts = [...this.sorts]
+      this.sorts = sorts
+      this.sorts_id = this.sorts[index].id
+      this.page = 1
+      this.library_books = []
+      this.getBookData()
+      console.log(this.sorts)
+    },
     adminPathFn(path) {
       let vm = this
       if (vm.librarieData.is_admin === 1) { vm.$goto(path) }
@@ -518,6 +612,35 @@ wepy.page({
         name: vm.librarieData.address
       })
     },
+    getBookData() {
+      let vm = this
+      vm.no_more = false
+      console.log(vm.sorts_id, 'vm.sorts_id')
+      vm.$get({url: `${service.host}/libraries/${vm.id}/sorts/${vm.sorts_id}/books/v2?page=${vm.page}`}).then(({
+        code,
+        data
+      }) => {
+        if (code === 0) {
+           // data = data.data
+          if (data.data == [] || data.data.length < 1) {
+            if (vm.library_books < 1) {
+               vm.no_more = true
+            }
+            return
+          }
+          vm.page++
+          if (vm.page == 1) {
+            vm.library_books = data.data
+          } else {
+            data.data.map((item, index) => {
+              vm.library_books.push(item)
+            })
+          }
+          console.log(vm.library_books)
+          console.log(vm.page)
+        }
+      })
+    },
     initPageData() {
       let vm = this
       vm.no_more = false
@@ -527,23 +650,13 @@ wepy.page({
       }) => {
         if (code === 0) {
           vm.librarieData = data
-           data = data.library_books
-          if (data.data == [] || data.data.length < 1) {
-            if (vm.library_books < 1) {
-               vm.no_more = true
-            }
-            return
+          for (let item of data.sorts) {
+            console.log(item)
+            item.active = false
           }
-          if (vm.page == 1) {
-            vm.page++
-            vm.library_books = data.data
-          } else {
-            vm.page++
-            data.data.map((item, index) => {
-              vm.library_books.push(item)
-            })
-          }
-          console.log(vm.library_books)
+          data.sorts.unshift({name: '全部图书', active: true, id: 0})
+          vm.sorts = data.sorts
+          vm.getBookData()
         }
       })
       vm.$get({url: `${service.host}/libraries/${vm.id}/share`}).then(({code, data}) => {
