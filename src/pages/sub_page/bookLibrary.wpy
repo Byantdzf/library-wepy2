@@ -23,14 +23,21 @@ page {
       border-radius: 40rpx;
       padding: 0 30rpx;
       margin: 10rpx auto;
+      position: relative;
       ._icon{
         width: 28rpx;
         height: 28rpx;
         margin-right: 10rpx;
       }
       ._input{
-        width: 90%;
+        width: 87%;
         letter-spacing: 2rpx;
+      }
+      .ui-clear-icon{
+        position: absolute;
+        right: 30rpx;
+        width: 28rpx;
+        height: 28rpx;
       }
     }
     ._title{
@@ -80,7 +87,8 @@ page {
       <view class="_search f-fc">
         <image class="_icon" src="~@/images/icon/search_icon.png" mode="aspectFit"></image>
         <input type="text" class="_input lineH40 font_28" placeholder="搜索图书" v-model="searchVal"
-               @confirm="searchConfirm($wx)"/>
+               @confirm="searchConfirm(1)"/>
+        <image v-if="searchVal" class="ui-clear-icon" src="~@/images/icon/clear.png" mode="widthFix" @tap="searchConfirm(0)"></image>
       </view>
     </view>
     <view class="_library_container " style="top: {{navHeight+22}}px;">
@@ -150,11 +158,11 @@ wepy.page({
     this.initPageData()
   },
   methods: {
-    searchConfirm() {
+    searchConfirm(e) {
       let vm = this
-      // if (!vm.searchVal) {
-      //   return vm.$showToast('请输入搜索内容')
-      // }
+      if (!e) {
+        vm.searchVal = ''
+      }
       vm.page = 1
       vm.list = []
       vm.no_more = false
@@ -162,10 +170,9 @@ wepy.page({
       vm.initPageData()
       setTimeout(() => {
         vm.$hideLoading()
-        // vm.searchVal = ''
       }, 1200)
     },
-initPageData() {
+    initPageData() {
       let vm = this
       vm.$get({url: `${service.host}/libraries/${vm.id}/books/v2?page=${vm.page}&keyword=${vm.searchVal}`}).then(({code, data}) => {
         if (code === 0) {

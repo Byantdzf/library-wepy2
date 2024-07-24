@@ -17,6 +17,7 @@ page {
     border-radius: 40rpx;
     padding: 0 30rpx;
     margin: 10rpx auto;
+    position: absolute;
 
     ._icon {
       width: 28rpx;
@@ -25,8 +26,15 @@ page {
     }
 
     ._input {
-      width: 90%;
+      width: 87%;
       letter-spacing: 2rpx;
+    }
+
+    .ui-clear-icon{
+      position: absolute;
+      right: 30rpx;
+      width: 28rpx;
+      height: 28rpx;
     }
   }
 
@@ -97,7 +105,8 @@ page {
       <view class="_search f-fc ">
         <image class="_icon" src="~@/images/icon/search_icon.png" mode="aspectFit"></image>
         <input type="text" class="_input lineH40 font_28" placeholder="搜索图书" v-model="searchVal"
-               @confirm="searchConfirm($wx)"/>
+               @confirm="searchConfirm(1)"/>
+        <image v-if="searchVal" class="ui-clear-icon" src="~@/images/icon/clear.png" mode="widthFix" @tap="searchConfirm(0)"></image>
       </view>
     </view>
 
@@ -181,11 +190,11 @@ wepy.page({
   },
   methods: {
 
-    searchConfirm() {
+    searchConfirm(e) {
       let vm = this
-      // if (!vm.searchVal) {
-      //   return vm.$showToast('请输入搜索内容')
-      // }
+      if (!e) {
+        vm.searchVal = ''
+      }
       vm.page = 1
       vm.no_more = false
       vm.library_books = []
