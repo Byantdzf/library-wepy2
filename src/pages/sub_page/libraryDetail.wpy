@@ -404,9 +404,9 @@ module.exports.getBadgeR = getBadgeR;
             <block v-for="(item, index) in sorts">
               <view  class="scroll-view-item_H {{item.active?'_active':''}} _class_item text-c marginR16"  @tap="searchSort(index)">{{item.name}}</view>
             </block>
-          <view class="f-fcc marginT8">
-            <image class="_icon_sq" src="~@/images/icon/sq.png" mode="aspectFit"></image><view class="font_24 color333">收起</view>
-          </view>
+<!--          <view class="f-fcc marginT8">-->
+<!--            <image class="_icon_sq" src="~@/images/icon/sq.png" mode="aspectFit"></image><view class="font_24 color333">收起</view>-->
+<!--          </view>-->
         </view>
       </view>
 
