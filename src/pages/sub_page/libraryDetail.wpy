@@ -694,7 +694,6 @@ wepy.page({
     this.initPageData()
   },
   onShow() {
-    console.log('12221212122112')
     // this.initPageData()
     // this.page = 1
     // this.library_books = []

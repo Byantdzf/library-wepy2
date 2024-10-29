@@ -114,7 +114,7 @@ subPackages: [
 {
 'root': 'pages/sub_page',
 'pages': ['searchLibrary','searchBooks','createLibrary','libraryDetail','bookDetail','createBookComment',
-'editBook','BookComment','enteringBooks','classBooks','Management','BorrowManage','BorrowBook','bookClassList','bookLibrary']
+'editBook','BookComment','enterEditBook','enteringBooks','classBooks','Management','BorrowManage','BorrowBook','bookClassList','bookLibrary']
 },
 {
 'root': 'pages/user_page',

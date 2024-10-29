@@ -41,6 +41,13 @@ page {
 
       ._item {
         margin-top: 40rpx;
+        position: relative;
+
+        .ui-star{
+          position: absolute;
+          top: 10rpx;
+          padding-left: 6rpx;
+        }
 
         ._next_icon {
           width: 10rpx;
@@ -102,10 +109,9 @@ page {
     }
 
     ._form_btn {
-      width: 320rpx;
-      height: 72rpx;
+      width: 460rpx;
+      height: 80rpx;
       background: linear-gradient(90deg, #9DC0F8 0%, #508AFC 100%);
-      //box-shadow: 0rpx 8rpx 24rpx 0rpx rgba(55, 123, 203, 0.5);
       border-radius: 40rpx;
       margin: auto;
       position: relative;
@@ -142,11 +148,56 @@ module.exports.getData = getData;
       </view>
     </view>
     <view class="_list">
-      <view class="lineH42 color333 bold font_30 ">基本信息</view>
+      <view class="lineH42 color333 bold font_30">基本信息</view>
       <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">图书标题</view>
+        <view class="color333 font_28 lineH40 spacing2">图书标题<span class="red_theme font_32 ui-star">*</span></view>
         <view class="f-fc">
           <input type="text" placeholder="请输入图书标题" class="text-r spacing2" v-model="formData.title"
+                 placeholder-class="color999"/>
+          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
+                 class="_next_icon"></image>
+        </view>
+      </view>
+      <view class="_item f-fbc">
+        <view class="color333 font_28 lineH40 spacing2">作者<span class="red_theme font_32 ui-star">*</span></view>
+        <view class="f-fc">
+          <input type="text" placeholder="请填写作者" class="text-r spacing2" v-model="formData.author"
+                 placeholder-class="color999"/>
+          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
+                 class="_next_icon"></image>
+        </view>
+      </view>
+      <view class="_item f-fbc">
+        <view class="color333 font_28 lineH40 spacing2">编码<span class="red_theme font_32 ui-star">*</span></view>
+        <view class="f-fc">
+          <input type="text" placeholder="请填写ISBN码" class="text-r spacing2" v-model="formData.isbn"
+                 placeholder-class="color999"/>
+          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
+                 class="_next_icon"></image>
+        </view>
+      </view>
+      <view class="_item f-fbc">
+        <view class="color333 font_28 lineH40 spacing2">价格<span class="red_theme font_32 ui-star">*</span></view>
+        <view class="f-fc">
+          <input type="number" placeholder="请填写价格" class="text-r spacing2" v-model="formData.price"
+                 placeholder-class="color999"/>
+          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
+                 class="_next_icon"></image>
+        </view>
+      </view>
+      <view class="_item f-fbc">
+        <view class="color333 font_28 lineH40 spacing2">册数<span class="red_theme font_32 ui-star">*</span></view>
+        <view class="f-fc">
+          <input type="number" placeholder="请填写册数" class="text-r spacing2" v-model="formData.num"
+                 placeholder-class="color999"/>
+          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
+                 class="_next_icon"></image>
+        </view>
+      </view>
+      <view class="_item f-fbc">
+        <view class="color333 font_28 lineH40 spacing2">页数<span class="red_theme font_32 ui-star">*</span></view>
+        <view class="f-fc">
+          <input type="number" placeholder="请填写页数" class="text-r spacing2" v-model="formData.pages"
                  placeholder-class="color999"/>
           <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
                  class="_next_icon"></image>
@@ -156,16 +207,6 @@ module.exports.getData = getData;
         <view class="color333 font_28 lineH40 spacing2">译本原标题</view>
         <view class="f-fc">
           <input type="text" placeholder="请填写原标题" class="text-r spacing2" v-model="formData.origin_title"
-                 placeholder-class="color999"/>
-          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
-                 class="_next_icon"></image>
-        </view>
-
-      </view>
-      <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">作者</view>
-        <view class="f-fc">
-          <input type="text" placeholder="请填写作者" class="text-r spacing2" v-model="formData.author"
                  placeholder-class="color999"/>
           <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
                  class="_next_icon"></image>
@@ -192,45 +233,6 @@ module.exports.getData = getData;
                    class="_next_icon"></image>
           </view>
         </picker>
-      </view>
-      <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">编码</view>
-        <view class="f-fc">
-          <input type="text" placeholder="请填写ISBN码" class="text-r spacing2" v-model="formData.isbn"
-                 placeholder-class="color999"/>
-          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
-                 class="_next_icon"></image>
-        </view>
-
-      </view>
-      <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">价格</view>
-        <view class="f-fc">
-          <input type="number" placeholder="请填写价格" class="text-r spacing2" v-model="formData.price"
-                 placeholder-class="color999"/>
-          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
-                 class="_next_icon"></image>
-        </view>
-
-      </view>
-      <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">册数</view>
-        <view class="f-fc">
-          <input type="number" placeholder="请填写册数" class="text-r spacing2" v-model="formData.num"
-                 placeholder-class="color999"/>
-          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
-                 class="_next_icon"></image>
-        </view>
-      </view>
-      <view class="_item f-fbc">
-        <view class="color333 font_28 lineH40 spacing2">页数</view>
-        <view class="f-fc">
-          <input type="number" placeholder="请填写页数" class="text-r spacing2" v-model="formData.pages"
-                 placeholder-class="color999"/>
-          <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
-                 class="_next_icon"></image>
-        </view>
-
       </view>
       <view class="_item f-fbc">
         <view class="color333 font_28 lineH40 spacing2">出版社</view>
@@ -280,8 +282,7 @@ module.exports.getData = getData;
     </view>
     <view class="heigth160"></view>
     <view class="fixed_bot text-c f-fcc" style="width: 100%;padding: 70rpx;z-index: 99999" >
-      <view class="_form_btn _form_btn_del f-fcc colorfff font_30 color-theme spacing2 bold" @tap="deleteFn">删除</view>
-      <view class="_form_btn f-fcc colorfff font_30 spacing2 bold" @tap="submitFn">保存</view>
+      <view class="_form_btn f-fcc colorfff font_30 spacing2 bold" @tap="submitFn">保存并录入</view>
     </view>
   </view>
 </template>
@@ -300,7 +301,6 @@ wepy.page({
   mixins: [https, base],
 
   data: {
-    showCustom: false,
     StatusBar: 0,
     CustomBar: 0,
     Custom: 0,
@@ -308,10 +308,6 @@ wepy.page({
     library_id: 0,
     user_id: 0,
     bookData: {},
-    cashPledgeData: ['需要押金', '不需要押金'],
-    cashPledgeIndex: 0,
-    borrowTimeData: ['7天', '30天'],
-    borrowTimeIndex: 0,
     sorts: [], // 分类
     sortsIndex: 0, // 分类下标
     detail_pic: [],
@@ -334,24 +330,16 @@ wepy.page({
         translator: ''
     }
   },
-  onPageScroll(res) {
-    let top = res.scrollTop
-    this.showCustom = top > 18
-  },
-// 上拉获取更多数据
-  onReachBottom() {
-    if (!this.no_more) {
-      // this.getList()
-    }
-  },
-  // 下拉刷新
-  onPullDownRefresh() {
-    // this.page = 1
-    // this.list = []
-    // this.no_more = false
-    // this.getList()
-  },
   methods: {
+    getSorts() {
+      let vm = this
+      vm.$get({url: `${service.host}/libraries/${vm.library_id}/sorts`}).then(({code, data}) => {
+        if (code === 0) {
+          console.log(data)
+          vm.sorts = data.sorts
+        }
+      })
+    },
     replacePic() { // 更换封面
       let vm = this
       wx.chooseImage({
@@ -366,7 +354,6 @@ wepy.page({
     },
     uploadPics() { // 更换图书展示
       let vm = this
-
       wx.chooseImage({
         count: 9,
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -377,9 +364,6 @@ wepy.page({
               vm.detail_pic.push(res)
               vm.detail_pic = [...vm.detail_pic]
               vm.formData.detail_pic = vm.detail_pic
-              // vm.$nextTick(() => {
-              //   vm.formData.detail_pic = [...vm.detail_pic]
-              // })
             })
           }
         },
@@ -392,35 +376,6 @@ wepy.page({
       vm.detail_pic.splice(index, 1)
       vm.detail_pic = [...vm.detail_pic]
       vm.formData.detail_pic = vm.detail_pic
-    },
-    initPageData() {
-      let vm = this
-        vm.$get({url: `${service.host}/libraries/${vm.library_id}/books/${vm.id}?&book_user_id=${vm.user_id}`}).then(({
-          code,
-          data
-        }) => {
-          if (code === 0) {
-            vm.bookData = data
-            vm.formData.image = data.image
-            vm.formData.title = data.title
-            vm.formData.origin_title = data.origin_title
-            vm.formData.author = data.author
-            vm.formData.translator = data.translator
-            vm.formData.isbn = data.isbn
-            vm.formData.price = data.price
-            vm.formData.pages = data.pages
-            vm.formData.num = data.library_book ? data.library_book.num : 0
-            vm.formData.publisher = data.publisher
-            vm.formData.pubdate = data.pubdate
-            vm.formData.summary = data.summary
-            vm.formData.detail_pic = data.detail_pic
-            vm.detail_pic = data.detail_pic
-            vm.formData.class_id = data.sort ? data.sort.id : 0
-            vm.formData.className = data.sort ? data.sort.name : ''
-            vm.sorts = data.sorts
-            console.log(vm.formData, '11', vm.sorts)
-          }
-        })
     },
     sortChange(e) { // 分类下拉
       let {name} = e.target.dataset, vm = this,
@@ -436,55 +391,29 @@ wepy.page({
     submitFn() { // 提交
       let vm = this
       console.log(vm.formData)
+      if (vm.formData.image === '') return vm.$showToast('请上传封面')
       if (vm.formData.title === '') return vm.$showToast('请填写标题')
       if (vm.formData.author === '') return vm.$showToast('请填写作者')
+      if (vm.formData.isbn === '') return vm.$showToast('请填写ISBN码')
+      if (vm.formData.price === '') return vm.$showToast('请填写价格')
       if (vm.formData.num === '') return vm.$showToast('请填写册数')
+      if (vm.formData.pages === '') return vm.$showToast('请填写页数')
       vm.formData.book_user_id = vm.user_id
+      if (!vm.formData.className) {
+        vm.formData.class_id = 0
+      }
       let data = vm.formData
-      vm.$put({url: `${service.host}/libraries/${vm.library_id}/books/${vm.id}`, data}).then(({code, data}) => {
+      vm.$post({url: `${service.host}/hand/libraries/${vm.library_id}/books`, data}).then(({code, data}) => {
           if (code === 0) {
             vm.$Toast_success('保存成功')
-            vm.$gotoBackV2(1, {id: vm.id, library_id: vm.library_id, user_id: vm.user_id})
+            vm.$gotoBackV2(1, {id: vm.library_id})
           }
       })
-    },
-    deleteFn() { // 删除图书
-      let vm = this
-      wx.showModal({
-        title: '提示',
-        content: '确认删除该图书信息？',
-        success: (res) => {
-          if (res.confirm) {
-            let data = {
-              book_user_id: vm.user_id
-            }
-            vm.$delete({url: `${service.host}/libraries/${vm.library_id}/books/${vm.id}`, data}).then(({code, data}) => {
-              if (code === 0) {
-                vm.$Toast_success('已删除')
-                setTimeout(() => {
-                  vm.$gotoBackV3(2, {id: vm.library_id})
-                }, 1000)
-              }
-            })
-          }
-        }
-      })
-    },
-    onChooseAvatar(e) {
-      const {avatarUrl} = e.detail
-      this.avatarUrl = avatarUrl
-    },
-    goto(path) {
-      this.$goto(path)
     }
   },
   onLoad(e) {
-    this.id = e.id
     this.library_id = e.library_id
-    this.user_id = e.user_id
-    if (this.library_id) {
-      this.initPageData()
-    }
+    this.getSorts()
   },
   created() {
     let app = this.$app.$options
@@ -497,7 +426,7 @@ wepy.page({
 </script>
 <config>
 {
-navigationBarTitleText: '图书编辑',
+navigationBarTitleText: '填写图书信息',
 enablePullDownRefresh: false,
 <!--navigationStyle: 'custom',-->
 backgroundColorTop: '#F4F7FC',

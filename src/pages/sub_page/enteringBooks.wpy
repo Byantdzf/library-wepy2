@@ -52,9 +52,39 @@ page {
     }
   }
 }
+
+.cu-dialog{
+  width: 600rpx;
+  padding: 40rpx 50rpx 50rpx 50rpx!important;
+  border-radius: 30rpx;
+  position: relative;
+  overflow:initial;
+  background: #ffffff;
+  .ui-tips-icon{
+    width: 300rpx;
+    height: 164rpx;
+    display: block;
+    margin: 60rpx auto 0 auto;
+  }
+  .ui-tips-text{
+    margin-bottom: 6rpx;
+  }
+  .ui-tips-btn, .ui-tips-edit-btn{
+    width: 240rpx;
+    height: 80rpx;
+    border-radius: 40rpx;
+    border: 2rpx solid #d7d7d7;
+    margin-top: 80rpx;
+  }
+
+  .ui-tips-edit-btn{
+    background: #5C9DFF;
+    border: 2rpx solid #5C9DFF;
+  }
+}
 </style>
 <template>
-  <view class="_container " style="margin-top:{{CustomBar}}px;">
+  <view class="_container " style="margin-top:{{CustomBar}}px;" v-if="loading">
     <view class="_book_box" v-for="(item, index) in bookData" :key="index">
       <image src="{{item.image}}" mode="aspectFill"
              class="_img"></image>
@@ -80,6 +110,18 @@ page {
       <view class="_btn colorfff f-fcc spacing2" @tap="addCollect">一键录入</view>
     </view>
   </view>
+  <view class="cu-modal" :class="{'show' : showTips}">
+    <view class="cu-dialog">
+      <view class="font_36 text-center bold">温馨提示</view>
+      <image class="ui-tips-icon" src="https://image.fulllinkai.com/202410/29/3e513a3dac7b6d19d5c0bfc73a7d2c4c.png" mode="widthFix"></image>
+      <view class="font_30 color666 ui-tips-text">系统未识别图书信息</view>
+      <view class="font_30 color666">需要您先填写一下图书信息</view>
+      <view class="f-fbc font_30">
+        <view class="f-fcc ui-tips-btn color333" @tap="jumpBack">取消</view>
+        <view class="f-fcc ui-tips-edit-btn white" @tap="jumpPath">填写图书信息</view>
+      </view>
+    </view>
+  </view>
 </template>
 <!--x-->
 
@@ -96,7 +138,9 @@ wepy.page({
   mixins: [https, base],
 
   data: {
+    showTips: false,
     showCustom: false,
+    loading: false,
     id: 0,
     isbn: '',
     page: 1,
@@ -172,6 +216,10 @@ wepy.page({
           owner: wx.getStorageSync('openid')
         }
       vm.$post({url: `${service.host}/libraries/${vm.id}/books`, data}).then(({code, data}) => {
+        if (!data || data == 'false') {
+          vm.showTips = true
+          return
+        }
         if (code === 0) {
           if (data.class_id == 0) {
             data.sortsIndex = 0
@@ -193,10 +241,18 @@ wepy.page({
           console.log(vm.bookData)
           console.log(vm.bookList, '888')
         }
+        vm.loading = true
       })
     },
     goto(path) {
       this.$goto(path)
+    },
+    jumpBack() {
+      wx.navigateBack({delta: 1})
+    },
+    jumpPath() {
+      console.log(this.id, '******************')
+      wx.redirectTo({url: `/pages/sub_page/enterEditBook?library_id=${this.id}`})
     }
   },
   onLoad(e) {

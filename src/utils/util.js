@@ -193,7 +193,7 @@ const wx_login = () => {
   return new Promise((resolve, reject) => {
     wx.login({
       success: (res) => {
-        let versions = 'v5.4.25'
+        let versions = 'v5.4.26'
         let data = {
           code: res.code,
           formId: wx.getStorageSync('formId'),
