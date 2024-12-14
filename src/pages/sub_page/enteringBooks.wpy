@@ -251,8 +251,8 @@ wepy.page({
       wx.navigateBack({delta: 1})
     },
     jumpPath() {
-      console.log(this.id, '******************')
-      wx.redirectTo({url: `/pages/sub_page/enterEditBook?library_id=${this.id}`})
+      console.log(this.id, this.isbn, '****')
+      wx.redirectTo({url: `/pages/sub_page/enterEditBook?library_id=${this.id}&isbn=${this.isbn}`})
     }
   },
   onLoad(e) {

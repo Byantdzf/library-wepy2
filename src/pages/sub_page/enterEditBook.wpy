@@ -170,7 +170,7 @@ module.exports.getData = getData;
       <view class="_item f-fbc">
         <view class="color333 font_28 lineH40 spacing2">编码<span class="red_theme font_32 ui-star">*</span></view>
         <view class="f-fc">
-          <input type="text" placeholder="请填写ISBN码" class="text-r spacing2" v-model="formData.isbn"
+          <input type="text" placeholder="请填写ISBN码" :disabled="formData.isbn" class="text-r spacing2" v-model="formData.isbn"
                  placeholder-class="color999"/>
           <image src="~@/images/icon/next_iconV2.png" mode="widthFix"
                  class="_next_icon"></image>
@@ -413,6 +413,7 @@ wepy.page({
   },
   onLoad(e) {
     this.library_id = e.library_id
+    this.formData.isbn = e.isbn || ''
     this.getSorts()
   },
   created() {
